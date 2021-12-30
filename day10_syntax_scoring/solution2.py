@@ -2,7 +2,6 @@
 
 import os, sys, copy
 
-
 def main():
     log = False
     print("The received argument: {}".format(sys.argv[1]))
@@ -22,8 +21,17 @@ def main():
                             "}":1197,
                             ")":3,
                             "]":57 }
+    bracketCompletePointDict = {">":4,
+                            "}":3,
+                            ")":1,
+                            "]":2 }
 
+    bracketTranslateDictReverse = {   "<":">",
+                                "{":"}",
+                                "(":")",
+                                "[":"]" }
     errorSum = 0
+    completionStringPointList = []
     for lineIndex, line in enumerate(syntaxData):
         print("-----------------------------------------")
         print("---------------------LINE----------------")
@@ -51,10 +59,15 @@ def main():
                     openedBrackets.pop(-1)
                     print("openedBrackets: ",openedBrackets)
                     print("-----------------------------------------")
+            complCharSum = 0
+            if charIndex == len(line)-1:
+                completionStringPointList.append(0)
+                for complChar in reversed(openedBrackets):
+                    completionStringPointList[-1] = completionStringPointList[-1] * 5 + bracketCompletePointDict[ bracketTranslateDictReverse[complChar] ]
 
-            #input()
-
-    print("The sum of errors in the whole file:", errorSum)
+    print(completionStringPointList)
+    completionStringPointList.sort()
+    print("The middle element of the completion string point list:", completionStringPointList[ int(len(completionStringPointList)/2) ] )
 
 
 if __name__ == "__main__":
